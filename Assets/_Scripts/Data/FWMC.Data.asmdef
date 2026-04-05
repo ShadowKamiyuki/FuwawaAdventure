@@ -1,0 +1,16 @@
+{
+    "name": "FWMC.Data",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1a383a1acb0029f409e0794be561cbe4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,17 @@
+{
+    "name": "FWMC.Infrastructure",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1a383a1acb0029f409e0794be561cbe4",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

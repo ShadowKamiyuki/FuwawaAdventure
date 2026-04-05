@@ -1,0 +1,19 @@
+{
+    "name": "FWMC.Installers",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1a383a1acb0029f409e0794be561cbe4",
+        "GUID:6b8f808c527706b4081b7e2b9d62e1ad",
+        "GUID:29f573bb751d9be419a66f5d70e4cbb9",
+        "GUID:3dfeda3670f6d5049b852d83fd2f89a9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
