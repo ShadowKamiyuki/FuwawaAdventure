@@ -13,7 +13,6 @@ public class PlayerActions : MonoBehaviour
     [Header("Move settings")]
     [SerializeField] private float speed;
     [SerializeField] private float acceleration = 10f;
-    [SerializeField] private float deceleration = 15f;
 
     [Header("Jump settings")]
     [SerializeField] private float jumpForce;
@@ -52,22 +51,19 @@ public class PlayerActions : MonoBehaviour
     {
         if (cameraTransform == null)
         {
+            Debug.LogWarning("CameraTransform no asignado");
             _moveDirection = new Vector3(input.x, 0f, input.y).normalized;
             return;
         }
 
-        Vector3 forward = cameraTransform.forward;
-        Vector3 right = cameraTransform.right;
+        float cameraY = cameraTransform.eulerAngles.y;
 
-        forward.y = 0f;
-        right.y = 0f;
+        Vector3 inputDir = new Vector3(input.x, 0f, input.y);
 
-        forward.Normalize();
-        right.Normalize();
+        Quaternion rotation = Quaternion.Euler(0f, cameraY, 0f);
 
-        Vector3 move = forward * input.y + right * input.x;
-
-        _moveDirection = move.normalized;
+        _moveDirection = rotation * inputDir;
+        _moveDirection.Normalize();
     }
 
     private void Move()

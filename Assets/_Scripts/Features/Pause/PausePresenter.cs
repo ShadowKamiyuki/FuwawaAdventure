@@ -32,7 +32,7 @@ public class PausePresenter
     {
         var request = new LoadingRequest(
             load: new[] { "MainMenu" },
-            unload: new[] { "Gameplay" },
+            unload: new[] { "Game", "Pause" },
             nextState: AppState.MainMenu
         );
 

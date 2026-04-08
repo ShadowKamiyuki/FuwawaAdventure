@@ -26,7 +26,7 @@
     private void OnStartClicked()
     {
         var request = new LoadingRequest(
-            load: new[] { "Game" },
+            load: new[] { "Game", "Pause" },
             unload: new[] { "MainMenu" },
             nextState: AppState.Gameplay
         );

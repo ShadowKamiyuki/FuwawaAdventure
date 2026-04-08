@@ -13,8 +13,18 @@ public class PauseView : MonoBehaviour
 
     private void Awake()
     {
+        ServiceLocator.Register(this);
+
         resumeButton.onClick.AddListener(() => OnResume?.Invoke());
         quitToMenuButton.onClick.AddListener(() => OnQuit?.Invoke());
+
+        Hide();
+    }
+
+    private void OnDestroy()
+    {
+        if (ServiceLocator.Exists<PauseView>())
+            ServiceLocator.Unregister<PauseView>();
     }
 
     public void Show()

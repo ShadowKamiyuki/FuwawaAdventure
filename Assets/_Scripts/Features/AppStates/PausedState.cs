@@ -9,7 +9,7 @@ public class PausedState : IAppState
     {
         Time.timeScale = 0f;
 
-        _view = Object.FindFirstObjectByType<PauseView>();
+        _view = ServiceLocator.Get<PauseView>();
 
         if (_view == null)
         {
