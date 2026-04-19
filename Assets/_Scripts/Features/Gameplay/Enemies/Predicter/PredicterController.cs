@@ -30,11 +30,15 @@ namespace Predicter
 
         public Transform Target => target;
         public Rigidbody RB => rb;
+        public float MoveSpeed => moveSpeed;
+
+        public Rigidbody TargetRB;
 
         private void Awake()
         {
             sight = new LineOfSight();
             rb = GetComponent<Rigidbody>();
+            TargetRB = Target.GetComponent<Rigidbody>();
 
             states = new Dictionary<State, IState>
             {

@@ -28,29 +28,35 @@ public class SteearingBehaviours
         return dir.normalized * speedMultiplier;
     }
 
-    private static Vector3 CalculateFuturePosition(Transform self, Transform target, Rigidbody targetRB, float maxPredictionTime)
+    private static Vector3 CalculateFuturePosition(Transform self, Transform target, Rigidbody targetRB, float maxPredictionTime, float selfSpeed)
     {
         Vector3 targetVelocity = Vector3.zero;
         targetVelocity = targetRB.velocity;
+        targetVelocity.y = 0;
 
         Vector3 toTarget = target.position - self.position;
         toTarget.y = 0;
 
         float distance = toTarget.magnitude;
-        float predictionTime = Mathf.Clamp(distance / 5f, 0f, maxPredictionTime);
+        float predictionTime = 0f;
+
+        if (selfSpeed > 0.01f)
+            predictionTime = distance / selfSpeed;
+
+        predictionTime = Mathf.Clamp(predictionTime, 0f, maxPredictionTime);
 
         return target.position + targetVelocity * predictionTime;
     }
 
-    public static Vector3 Pursue(Transform self, Transform target, Rigidbody targetRB, float maxPredictionTime)
+    public static Vector3 Pursue(Transform self, Transform target, Rigidbody targetRB, float maxPredictionTime, float selfSpeed)
     {
-        Vector3 futurePos = CalculateFuturePosition(self, target, targetRB, maxPredictionTime);
+        Vector3 futurePos = CalculateFuturePosition(self, target, targetRB, maxPredictionTime, selfSpeed);
         return Seek(self, futurePos);
     }
 
-    public static Vector3 Evade(Transform self, Transform target, Rigidbody targetRB, float maxPredictionTime)
+    public static Vector3 Evade(Transform self, Transform target, Rigidbody targetRB, float maxPredictionTime, float selfSpeed)
     {
-        Vector3 futurePos = CalculateFuturePosition(self, target, targetRB, maxPredictionTime);
+        Vector3 futurePos = CalculateFuturePosition(self, target, targetRB, maxPredictionTime, selfSpeed);
         return Flee(self, futurePos);
     }
 

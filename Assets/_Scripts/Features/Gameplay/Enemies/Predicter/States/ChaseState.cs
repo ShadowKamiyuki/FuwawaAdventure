@@ -24,7 +24,13 @@ namespace Predicter
 
         public void FixedUpdate()
         {
-            Vector3 dir = SteearingBehaviours.Pursue(enemy.transform, enemy.Target, enemy.RB, 5f);
+            Vector3 dir = SteearingBehaviours.Pursue(
+                enemy.transform,
+                enemy.Target,
+                enemy.TargetRB,
+                5f,
+                enemy.MoveSpeed
+            );
             enemy.Move(dir);
         }
 

@@ -40,6 +40,7 @@ namespace Popoyo
         public Transform Target => target;
         public Rigidbody RB => rb;
         public bool IsDashing => CurrentState == State.Dash;
+        public float MoveSpeed => moveSpeed;
 
         private void Awake()
         {
