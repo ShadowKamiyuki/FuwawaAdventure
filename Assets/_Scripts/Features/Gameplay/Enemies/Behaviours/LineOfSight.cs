@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LineOfSight : MonoBehaviour
+public class LineOfSight
 {
     public bool IsInRange(Transform self, Transform target, float distance)
     {

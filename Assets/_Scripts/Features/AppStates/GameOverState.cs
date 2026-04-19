@@ -7,7 +7,9 @@ public class GameOverState : IAppState
 
     public void Enter()
     {
-        _view = Object.FindFirstObjectByType<GameOverView>();
+        Time.timeScale = 0f;
+
+        _view = ServiceLocator.Get<GameOverView>();
 
         if (_view == null)
         {
@@ -21,6 +23,8 @@ public class GameOverState : IAppState
 
     public void Exit()
     {
+        Time.timeScale = 1f;
+
         _presenter?.Dispose();
         _presenter = null;
     }

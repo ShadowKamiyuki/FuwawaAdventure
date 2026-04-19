@@ -25,7 +25,7 @@ public class GameOverPresenter
     {
         var request = new LoadingRequest(
             load: new[] { "MainMenu" },
-            unload: new[] { "Gameplay" },
+            unload: new[] { "Game", "Pause", "GameOver" },
             nextState: AppState.MainMenu
         );
 

@@ -11,7 +11,15 @@ public class GameOverView : MonoBehaviour
 
     private void Awake()
     {
+        ServiceLocator.Register(this);
         backToMenuButton.onClick.AddListener(() => OnBackToMenu?.Invoke());
+        Hide();
+    }
+
+    private void OnDestroy()
+    {
+        if (ServiceLocator.Exists<GameOverView>())
+            ServiceLocator.Unregister<GameOverView>();
     }
 
     public void Show()
