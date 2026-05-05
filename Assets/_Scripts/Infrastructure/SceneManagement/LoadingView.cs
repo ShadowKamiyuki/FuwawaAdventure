@@ -6,7 +6,7 @@ public class LoadingView : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private Slider progressBar;
+    [SerializeField] private Image progressBar;
 
     [Header("Fade")]
     [SerializeField] private FadeController fadeController;
@@ -17,9 +17,7 @@ public class LoadingView : MonoBehaviour
 
         if (progressBar != null)
         {
-            progressBar.minValue = 0f;
-            progressBar.maxValue = 1f;
-            progressBar.value = 0f;
+            progressBar.fillAmount = 0f;
         }
     }
 
@@ -31,7 +29,7 @@ public class LoadingView : MonoBehaviour
     public void SetProgress(float value)
     {
         if (progressBar != null)
-            progressBar.value = value;
+            progressBar.fillAmount = value;
     }
 
     public void ShowLoadingScreen()

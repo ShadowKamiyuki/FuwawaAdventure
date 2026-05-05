@@ -32,6 +32,9 @@ public class PlayerActions : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private float rotationSpeed = 10f;
 
+    public bool IsGrounded => isGrounded;
+    public Vector3 Velocity => rb.velocity;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
