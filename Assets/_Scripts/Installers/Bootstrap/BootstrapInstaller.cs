@@ -9,12 +9,15 @@ public class BootstrapInstaller : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private SceneLoaderService sceneLoaderService;
 
+    IInputService inputService;
+
     private void Awake()
     {
         Debug.Log("=== CoreInstaller iniciado ===");
 
-        IInputService inputService = new InputService();
+        inputService = new InputService();
         ServiceLocator.Register(inputService);
+        ServiceLocator.Register<IRespawnService>(new RespawnService());
 
         //RegisterService<IAudioService>(audioManager);
         RegisterService<ISceneLoader>(sceneLoaderService);
@@ -35,6 +38,11 @@ public class BootstrapInstaller : MonoBehaviour
         gameManager.RegisterStates(states);
 
         Debug.Log("=== Estados creados ===");
+    }
+
+    private void OnDestroy()
+    {
+        (inputService as InputService)?.Dispose();
     }
 
     private void RegisterService<T>(MonoBehaviour service)

@@ -9,6 +9,8 @@ public class PlayerActions : MonoBehaviour
     private float coyoteTimer;
     private float jumpBufferTimer;
     private bool jumpRequested;
+    private Vector3 lastPlatformPosition;
+    private MovingPlatform currentPlatform;
 
     [Header("Move settings")]
     [SerializeField] private float speed;
@@ -43,6 +45,7 @@ public class PlayerActions : MonoBehaviour
     private void FixedUpdate()
     {
         CheckGround();
+        ApplyPlatformMovement();
         Move();
         RotateCharacter();
         UpdateTimers();
@@ -79,6 +82,17 @@ public class PlayerActions : MonoBehaviour
         velocity.z = Mathf.Lerp(velocity.z, target.z, acceleration * Time.fixedDeltaTime);
 
         rb.velocity = velocity;
+    }
+
+    private void ApplyPlatformMovement()
+    {
+        if (currentPlatform == null) return;
+
+        Vector3 delta = currentPlatform.transform.position - lastPlatformPosition;
+
+        rb.position += delta;
+
+        lastPlatformPosition = currentPlatform.transform.position;
     }
 
     public void SetJumpPressed(bool pressed)
@@ -163,5 +177,23 @@ public class PlayerActions : MonoBehaviour
     {
         //if (other.GetComponent<IInteractable>() == _currentInteractable)
         //    _currentInteractable = null;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        var platform = collision.collider.GetComponent<MovingPlatform>();
+
+        if (platform != null)
+        {
+            currentPlatform = platform;
+            lastPlatformPosition = platform.transform.position;
+        }
+
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.collider.GetComponent<MovingPlatform>() == currentPlatform)
+            currentPlatform = null;
     }
 }

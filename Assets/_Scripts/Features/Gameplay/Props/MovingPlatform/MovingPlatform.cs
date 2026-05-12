@@ -8,6 +8,8 @@ public class MovingPlatform : MonoBehaviour
 
     private Rigidbody rb;
     private Vector3 target;
+    private Vector3 lastPosition;
+    public Vector3 PlatformVelocity { get; private set; }
 
     private void Awake()
     {
@@ -19,6 +21,9 @@ public class MovingPlatform : MonoBehaviour
     {
         Vector3 newPos = Vector3.MoveTowards(rb.position, target, moveSpeed * Time.fixedDeltaTime);
         rb.MovePosition(newPos);
+
+        PlatformVelocity = (newPos - lastPosition) / Time.fixedDeltaTime;
+        lastPosition = newPos;
 
         if (Vector3.Distance(rb.position, target) < 0.1f)
         {

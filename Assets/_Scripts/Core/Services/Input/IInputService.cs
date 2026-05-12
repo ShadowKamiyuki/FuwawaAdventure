@@ -4,7 +4,8 @@ using UnityEngine;
 public interface IInputService
 {
     Vector2 Movement { get; }
-    Vector2 Look { get; }
+    Vector2 GetLook(bool useDeltaTime);
+    Vector2 GetSmoothLook(float smoothTime);
 
     event Action AttackStarted;
     event Action AttackCanceled;

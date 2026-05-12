@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerAnimationController : MonoBehaviour
+public class PlayerAnimationController : MonoBehaviour, IUpdatable
 {
     [SerializeField] private Animator animator;
     private Rigidbody rb;
@@ -11,11 +11,12 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void Awake()
     {
+        ServiceLocator.Get<IUpdateService>().Register(this);
         rb = GetComponent<Rigidbody>();
         playerActions = GetComponent<PlayerActions>();
     }
 
-    private void Update()
+    public void Tick(float deltaTime)
     {
         UpdateAnimations();
     }
@@ -28,5 +29,14 @@ public class PlayerAnimationController : MonoBehaviour
         float speed = horizontalVelocity.magnitude;
 
         animator.SetFloat("Speed", speed * speedMultiplier);
+    }
+
+    private void OnDestroy()
+    {
+        IUpdateService updateManager = ServiceLocator.Get<IUpdateService>();
+        if (updateManager != null)
+        {
+            updateManager.Unregister(this);
+        }
     }
 }

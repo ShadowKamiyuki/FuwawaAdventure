@@ -1,12 +1,26 @@
 using UnityEngine;
 
-public class RotatingBumper : MonoBehaviour
+public class RotatingBumper : MonoBehaviour, IUpdatable
 {
     [SerializeField] private float rotationSpeed;
     [SerializeField] private GameObject axis;
 
-    private void Update()
+    private void Awake()
     {
-        axis.transform.Rotate(new Vector3(0, rotationSpeed * Time.deltaTime, 0));
+        ServiceLocator.Get<IUpdateService>().Register(this);
+    }
+
+    public void Tick(float deltaTime)
+    {
+        axis.transform.Rotate(Vector3.up * Time.deltaTime * rotationSpeed, Space.World);
+    }
+
+    private void OnDestroy()
+    {
+        IUpdateService updateManager = ServiceLocator.Get<IUpdateService>();
+        if (updateManager != null)
+        {
+            updateManager.Unregister(this);
+        }
     }
 }

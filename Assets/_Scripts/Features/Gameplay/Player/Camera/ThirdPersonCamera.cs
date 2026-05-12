@@ -1,9 +1,9 @@
 using UnityEngine;
 
-[System.Obsolete]
 public class ThirdPersonCamera : MonoBehaviour
 {
-    [Header("Target")]
+    private IInputService _input;
+
     [SerializeField] private Transform target;
 
     [Header("Distance")]
@@ -11,15 +11,22 @@ public class ThirdPersonCamera : MonoBehaviour
     [SerializeField] private float height = 2f;
 
     [Header("Rotation")]
-    [SerializeField] private float mouseSensitivity = 3f;
+    [SerializeField] private float sensitivity = 3f;
     [SerializeField] private float minY = -30f;
     [SerializeField] private float maxY = 60f;
+
+    [Header("Smoothing")]
+    [SerializeField] private float smoothTime = 0.05f;
 
     private float _yaw;
     private float _pitch;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
+    {
+        _input = ServiceLocator.Get<IInputService>();
+    }
+
+    private void Start()
     {
         Vector3 angles = transform.eulerAngles;
         _yaw = angles.y;
@@ -30,17 +37,18 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (target == null || _input == null) return;
+
         Rotate();
         Follow();
     }
 
     private void Rotate()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+        Vector2 look = _input.GetSmoothLook(smoothTime);
 
-        _yaw += mouseX;
-        _pitch -= mouseY;
+        _yaw += look.x * sensitivity;
+        _pitch -= look.y * sensitivity;
         _pitch = Mathf.Clamp(_pitch, minY, maxY);
     }
 
@@ -49,9 +57,9 @@ public class ThirdPersonCamera : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
 
         Vector3 offset = rotation * new Vector3(0, 0, -distance);
-        Vector3 targetPosition = target.position + Vector3.up * height;
+        Vector3 targetPos = target.position + Vector3.up * height;
 
-        transform.position = targetPosition + offset;
-        transform.LookAt(targetPosition);
+        transform.position = targetPos + offset;
+        transform.LookAt(targetPos);
     }
 }
