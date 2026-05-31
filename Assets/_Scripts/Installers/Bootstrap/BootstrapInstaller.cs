@@ -13,8 +13,6 @@ public class BootstrapInstaller : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("=== CoreInstaller iniciado ===");
-
         inputService = new InputService();
         ServiceLocator.Register(inputService);
         ServiceLocator.Register<IRespawnService>(new RespawnService());
@@ -23,8 +21,6 @@ public class BootstrapInstaller : MonoBehaviour
         RegisterService<ISceneLoader>(sceneLoaderService);
         RegisterService<IUpdateService>(updateManager);
         RegisterService<IAppStateMachine>(gameManager);
-
-        Debug.Log("=== Servicios globales registrados ===");
 
         Dictionary<AppState, IAppState> states = new()
         {
@@ -36,8 +32,6 @@ public class BootstrapInstaller : MonoBehaviour
         };
 
         gameManager.RegisterStates(states);
-
-        Debug.Log("=== Estados creados ===");
     }
 
     private void OnDestroy()

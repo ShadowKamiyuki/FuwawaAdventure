@@ -105,7 +105,7 @@
 
 //        float nearDistance = Mathf.Infinity;
 
-//        for(int i = 0;i < nodos.Length;i++)
+//        for (int i = 0; i < nodos.Length; i++)
 //        {
 //            Node newNode = nodos[i].gameObject.GetComponent<Node>();
 //            if (newNode == null) continue;
@@ -146,11 +146,11 @@
 //    {
 //        float costs = 0;
 //        costs += Vector3.Distance(node1.transform.position, node2.transform.position);
-//        if(node2.hasTrap)
+//        if (node2.hasTrap)
 //        {
 //            costs += 100;
 //        }
 //        return costs;
 //    }
-    
+
 //}

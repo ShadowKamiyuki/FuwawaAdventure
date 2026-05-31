@@ -3,15 +3,15 @@ using System.Collections;
 
 public class FlipperPlatform : MonoBehaviour
 {
-    public float velocidadRotacion = 200f;
+    public float RotationSpeed = 200f;
     public float delay = 0.2f;
-    private bool activada = false;
+    private bool activated = false;
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!activada && collision.gameObject.CompareTag("Player"))
+        if (!activated && collision.gameObject.CompareTag("Player"))
         {
-            activada = true;
+            activated = true;
             StartCoroutine(Flip());
         }
     }
@@ -23,9 +23,10 @@ public class FlipperPlatform : MonoBehaviour
         float rotado = 0f;
         while (rotado < 180f)
         {
-            float step = velocidadRotacion * Time.deltaTime;
+            float step = RotationSpeed * Time.deltaTime;
             transform.Rotate(Vector3.right, step);
             rotado += step;
+            activated = false;
             yield return null;
         }
     }

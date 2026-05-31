@@ -1,8 +1,8 @@
-//using System.Collections;
+//using Skeleton;
 //using System.Collections.Generic;
 //using UnityEngine;
 
-//public class StateFollowPoints<T> : State<T>
+//public class StateFollowPoints<T> : IState
 //{
 //    protected List<Vector3> _waypoints;
 //    int _index;
@@ -67,5 +67,26 @@
 //    {
 
 //    }
+
+//    public void Enter()
+//    {
+//        throw new System.NotImplementedException();
+//    }
+
+//    public void Update()
+//    {
+//        throw new System.NotImplementedException();
+//    }
+
+//    public void FixedUpdate()
+//    {
+//        throw new System.NotImplementedException();
+//    }
+
+//    public void Exit()
+//    {
+//        throw new System.NotImplementedException();
+//    }
+
 //    public bool IsFinishPath => _isFinishPath;
 //}

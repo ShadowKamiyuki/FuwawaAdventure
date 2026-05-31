@@ -55,8 +55,6 @@ public class GameManager : MonoBehaviour, IAppStateMachine
         CurrentState = newState;
         _currentState = nextState;
 
-        Debug.Log($"[StateMachine] AppState -> {newState}");
-
         _currentState.Enter();
         OnStateChanged?.Invoke(newState);
     }

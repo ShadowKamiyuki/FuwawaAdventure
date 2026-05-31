@@ -11,8 +11,6 @@ public class LoadingState : IAppState
 
     public async void Enter()
     {
-        Debug.Log("Entered Loading State");
-
         LoadingRequest request = _stateMachine.ConsumePendingRequest();
 
         if (request == null)
@@ -37,6 +35,6 @@ public class LoadingState : IAppState
 
     public void Exit()
     {
-        Debug.Log("Exited Loading State");
+        
     }
 }

@@ -3,51 +3,74 @@ using UnityEngine;
 
 public class FragilePlatform : MonoBehaviour
 {
-    [SerializeField] private float delay = 1f;
+    [Header("Timing")]
     [SerializeField] private float shakeDuration = 0.5f;
+    [SerializeField] private float fallDelay = 0.3f;
+    [SerializeField] private float respawnTime = 3f;
+
+    [Header("Shake")]
     [SerializeField] private float shakeAmount = 0.05f;
 
-    private Vector3 originalPosition;
-    private bool triggered;
+    private Vector3 startPosition;
+    private Quaternion startRotation;
+
     private Rigidbody rb;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true;
-        originalPosition = transform.position;
-    }
 
-    public void TriggerPlatform()
-    {
-        if (triggered) return;
-        triggered = true;
-        StartCoroutine(FallRoutine());
-    }
+        startPosition = transform.position;
+        startRotation = transform.rotation;
 
-    private IEnumerator FallRoutine()
-    {
-        float timer = 0f;
-
-        while (timer < shakeDuration)
-        {
-            timer += Time.deltaTime;
-            transform.position = originalPosition + Random.insideUnitSphere * shakeAmount;
-            yield return null;
-        }
-
-        transform.position = originalPosition;
-
-        float remainingDelay = Mathf.Max(0f, delay - shakeDuration);
-        yield return new WaitForSeconds(remainingDelay);
-        rb.isKinematic = false;
+        ResetPlatform();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            TriggerPlatform();
+            foreach (ContactPoint contact in collision.contacts)
+            {
+                if (contact.normal.y < -0.5f)
+                {
+                    StartCoroutine(PlatformRoutine());
+                    break;
+                }
+            }
         }
+    }
+
+    private IEnumerator PlatformRoutine()
+    {
+        float timer = 0f;
+
+        while (timer < shakeDuration)
+        {
+            timer += Time.deltaTime;
+
+            transform.position = startPosition +
+                                 Random.insideUnitSphere * shakeAmount;
+
+            yield return null;
+        }
+
+        transform.position = startPosition;
+
+        yield return new WaitForSeconds(fallDelay);
+
+        rb.isKinematic = false;
+
+        yield return new WaitForSeconds(respawnTime);
+
+        ResetPlatform();
+    }
+
+    private void ResetPlatform()
+    {
+        rb.isKinematic = true;
+
+        transform.position = startPosition;
+        transform.rotation = startRotation;
     }
 }

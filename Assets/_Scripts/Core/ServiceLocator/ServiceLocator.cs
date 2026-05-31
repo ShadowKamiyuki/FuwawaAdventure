@@ -23,7 +23,6 @@ public static class ServiceLocator
         }
 
         _services[type] = service;
-        Debug.Log($"[ServiceLocator] Registrado: {type.Name}");
     }
 
     public static void Unregister<T>()

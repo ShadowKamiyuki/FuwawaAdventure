@@ -54,8 +54,6 @@ public class SceneLoaderService : MonoBehaviour, ISceneLoader
 
         var scene2 = SceneManager.GetSceneByName(request.ScenesToLoad[0]);
 
-        Debug.Log("Scene loaded: " + scene2.isLoaded);
-        Debug.Log("Scene valid: " + scene2.IsValid());
         // 6. Activar escena principal
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(request.ScenesToLoad[0]));
 

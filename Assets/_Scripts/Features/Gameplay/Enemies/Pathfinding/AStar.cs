@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AStar : MonoBehaviour
+public class AStar
 {
     public static List<Node> Run(Node initialNode, Func<Node, bool> isSatisfied, Func<Node, List<Node>> getConnections, Func<Node, Node, float> getCosts, Func<Node, float> heuristic, int watchDog = 1000)
     {
@@ -15,15 +15,10 @@ public class AStar : MonoBehaviour
         pending.Enqueue(initialNode, 0);
         visited.Add(initialNode);
 
-        //int counter = 0;
-
         while (!pending.IsEmpty)
         {
-            //counter++;
-            //if (counter > watchDog) break;
-
             Node node = pending.Dequeue();
-            Debug.Log("AStar");
+
             if (isSatisfied(node))
             {
                 List<Node> path = new List<Node>();
@@ -60,9 +55,7 @@ public class AStar : MonoBehaviour
                     parents[children[i]] = node;
                 }
             }
-
         }
         return new List<Node>();
-
     }
 }
