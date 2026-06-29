@@ -13,6 +13,9 @@ public class BootstrapInstaller : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0;
+
         inputService = new InputService();
         ServiceLocator.Register(inputService);
         ServiceLocator.Register<IRespawnService>(new RespawnService());

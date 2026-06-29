@@ -14,6 +14,11 @@ public class FragilePlatform : MonoBehaviour
     private Vector3 startPosition;
     private Quaternion startRotation;
 
+    private bool isBreaking;
+
+    private WaitForSeconds fallDelayWait;
+    private WaitForSeconds respawnWait;
+
     private Rigidbody rb;
 
     private void Awake()
@@ -23,20 +28,25 @@ public class FragilePlatform : MonoBehaviour
         startPosition = transform.position;
         startRotation = transform.rotation;
 
+        fallDelayWait = new WaitForSeconds(fallDelay);
+        respawnWait = new WaitForSeconds(respawnTime);
+
         ResetPlatform();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (isBreaking) return;
+
+        if (!collision.gameObject.CompareTag("Player") || isBreaking)
+            return;
+
+        foreach (ContactPoint contact in collision.contacts)
         {
-            foreach (ContactPoint contact in collision.contacts)
+            if (contact.normal.y < -0.5f)
             {
-                if (contact.normal.y < -0.5f)
-                {
-                    StartCoroutine(PlatformRoutine());
-                    break;
-                }
+                StartCoroutine(PlatformRoutine());
+                break;
             }
         }
     }
@@ -57,11 +67,11 @@ public class FragilePlatform : MonoBehaviour
 
         transform.position = startPosition;
 
-        yield return new WaitForSeconds(fallDelay);
+        yield return fallDelayWait;
 
         rb.isKinematic = false;
 
-        yield return new WaitForSeconds(respawnTime);
+        yield return respawnWait;
 
         ResetPlatform();
     }
@@ -72,5 +82,7 @@ public class FragilePlatform : MonoBehaviour
 
         transform.position = startPosition;
         transform.rotation = startRotation;
+
+        isBreaking = false;
     }
 }

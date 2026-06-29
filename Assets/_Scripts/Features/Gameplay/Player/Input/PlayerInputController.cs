@@ -13,30 +13,20 @@ public class PlayerInputController : MonoBehaviour
 
     private void OnEnable()
     {
-        _input.AttackStarted += OnAttackStarted;
-        _input.AttackCanceled += OnAttackCanceled;
         _input.JumpStarted += OnJumpStarted;
         _input.JumpCanceled += OnJumpCanceled;
-        _input.InteractPressed += OnInteract;
     }
 
     private void OnDisable()
     {
-        _input.AttackStarted -= OnAttackStarted;
-        _input.AttackCanceled -= OnAttackCanceled;
         _input.JumpStarted -= OnJumpStarted;
         _input.JumpCanceled -= OnJumpCanceled;
-        _input.InteractPressed -= OnInteract;
     }
 
     private void FixedUpdate()
     {
         _actions.SetMoveDirection(_input.Movement);
     }
-
-    private void OnAttackStarted() => _actions.Attack();
-
-    private void OnAttackCanceled() { }
 
     private void OnJumpStarted()
     {
@@ -48,6 +38,4 @@ public class PlayerInputController : MonoBehaviour
     {
         _actions.SetJumpPressed(false);
     }
-
-    private void OnInteract() => _actions.Interact();
 }

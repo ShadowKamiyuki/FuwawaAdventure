@@ -157,28 +157,6 @@ public class PlayerActions : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
     }
 
-    public void Interact()
-    {
-        //_currentInteractable?.Interact(this);
-    }
-
-    public void Attack()
-    {
-        // agregar el ataque
-        Debug.Log("Attack");
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //_currentInteractable = other.GetComponent<IInteractable>();
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        //if (other.GetComponent<IInteractable>() == _currentInteractable)
-        //    _currentInteractable = null;
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         var platform = collision.collider.GetComponent<MovingPlatform>();

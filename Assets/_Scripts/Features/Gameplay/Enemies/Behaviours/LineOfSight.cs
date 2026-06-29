@@ -7,9 +7,9 @@ public class LineOfSight
         return Vector3.Distance(self.position, target.position) < distance;
     }
 
+    // (line 13) direction vector from self to the target
     public bool IsInAngle(Transform self, Transform target, float angle)
     {
-        // direction vector from self to the target
         Vector3 dir = target.position - self.position;
 
         return Vector3.Angle(self.forward, dir) < angle / 2;

@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
-    private IInputService _input;
-
     [SerializeField] private Transform target;
 
     [Header("Distance")]
@@ -11,44 +9,29 @@ public class ThirdPersonCamera : MonoBehaviour
     [SerializeField] private float height = 2f;
 
     [Header("Rotation")]
-    [SerializeField] private float sensitivity = 3f;
+    [SerializeField] private float sensitivity = 0.15f;
     [SerializeField] private float minY = -30f;
     [SerializeField] private float maxY = 60f;
 
-    [Header("Smoothing")]
-    [SerializeField] private float smoothTime = 0.05f;
-
     private float _yaw;
     private float _pitch;
-
-    void Awake()
-    {
-        _input = ServiceLocator.Get<IInputService>();
-    }
 
     private void Start()
     {
         Vector3 angles = transform.eulerAngles;
         _yaw = angles.y;
         _pitch = angles.x;
-
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void LateUpdate()
     {
-        if (target == null || _input == null) return;
-
-        Rotate();
         Follow();
     }
 
-    private void Rotate()
+    public void AddRotation(Vector2 delta)
     {
-        Vector2 look = _input.GetSmoothLook(smoothTime);
-
-        _yaw += look.x * sensitivity;
-        _pitch -= look.y * sensitivity;
+        _yaw += delta.x * sensitivity;
+        _pitch -= delta.y * sensitivity;
         _pitch = Mathf.Clamp(_pitch, minY, maxY);
     }
 

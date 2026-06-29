@@ -1,0 +1,204 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace AngrySkeleton
+{
+    public class AngrySkeletonController : MonoBehaviour
+    {
+        [Header("Target")]
+        [SerializeField] private Transform target;
+
+        [Header("Sight")]
+        [SerializeField] private float sightDistance = 10f;
+        [SerializeField] private float sightAngle = 60f;
+        [SerializeField] private LayerMask obstacles;
+
+        [Header("Movement")]
+        [SerializeField] private float moveSpeed = 3f;
+        [SerializeField] private float rotationSpeed = 5f;
+        [SerializeField] private float chaseStopDistance = 1.5f;
+
+        [Header("Patrol")]
+        [SerializeField] private List<Node> patrolRoute;
+
+        [Header("Combat")]
+        [SerializeField] private float minRange = 3f;
+        [SerializeField] private float maxRange = 8f;
+
+        private Rigidbody rb;
+        private LineOfSight sight;
+
+        public Transform Target => target;
+        public float MoveSpeed => moveSpeed;
+        public List<Node> PatrolRoute => patrolRoute;
+        public float ChaseStopDistance => chaseStopDistance;
+        public float MinRange => minRange;
+        public float MaxRange => maxRange;
+
+        public Vector3 MoveDirection { get; private set; }
+
+        public State CurrentState { get; private set; }
+
+        private IState _currentState;
+        private Dictionary<State, IState> states;
+
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody>();
+            sight = new LineOfSight();
+
+            states = new Dictionary<State, IState>
+            {
+                { State.Wander, new PatrolState(this)},
+                { State.Chase, new ChaseState(this)},
+                { State.Attack, new AttackState(this) },
+                { State.Flee, new FleeState(this) }
+            };
+        }
+
+        private void Start()
+        {
+            ChangeState(State.Wander);
+        }
+
+        private void Update()
+        {
+            if (CanSeeTarget())
+            {
+                float distance = Vector3.Distance(transform.position, target.position);
+
+                if (distance < MinRange)
+                {
+                    if (CurrentState != State.Flee)
+                        ChangeState(State.Flee);
+                }
+                else if (distance <= MaxRange)
+                {
+                    if (CurrentState != State.Attack)
+                        ChangeState(State.Attack);
+                }
+                else
+                {
+                    if (CurrentState != State.Chase)
+                        ChangeState(State.Chase);
+                }
+            }
+            else
+            {
+                if (CurrentState != State.Wander)
+                    ChangeState(State.Wander);
+            }
+
+            _currentState.Update();
+        }
+
+        private void ChangeState(State newState)
+        {
+            if (_currentState != null)
+                _currentState.Exit();
+
+            CurrentState = newState;
+            _currentState = states[newState];
+
+            _currentState.Enter();
+        }
+
+        public bool CanSeeTarget()
+        {
+            return sight.IsInRange(transform, target, sightDistance)
+                && sight.IsInAngle(transform, target, sightAngle)
+                && sight.CheckObstacles(transform, target, obstacles);
+        }
+
+        #region AStar
+        public List<Node> CalculatePath()
+        {
+            Node start = GetClosestNode(transform.position);
+            Node goal = GetClosestNode(target.position);
+
+            if (start == null || goal == null)
+                return new List<Node>();
+
+            if (start == goal)
+                return new List<Node> { start };
+
+            return AStar.Run(
+                start,
+                node => node == goal,
+                GetConnections,
+                GetCosts,
+                node => Heuristic(node, goal)
+            );
+        }
+
+        private Node GetClosestNode(Vector3 position)
+        {
+            Node closest = null;
+
+            Collider[] nodos = Physics.OverlapSphere(position, 10, LayerMask.GetMask("Node"));
+
+            float nearDistance = Mathf.Infinity;
+
+            for (int i = 0; i < nodos.Length; i++)
+            {
+                Node newNode = nodos[i].gameObject.GetComponent<Node>();
+                if (newNode == null) continue;
+
+                float distance = Vector3.Distance(position, nodos[i].transform.position);
+
+                if (distance < nearDistance)
+                {
+                    Vector3 direction = nodos[i].transform.position - position;
+                    if (Physics.Raycast(position, direction.normalized, distance, LayerMask.GetMask("Ground"))) continue;
+                    nearDistance = distance;
+                    closest = newNode;
+                }
+            }
+            return closest;
+
+        }
+
+        private List<Node> GetConnections(Node node)
+        {
+            return node.neightbourds;
+        }
+
+        private float GetCosts(Node a, Node b)
+        {
+            return Vector3.Distance(a.transform.position, b.transform.position);
+        }
+
+        private float Heuristic(Node node, Node goal)
+        {
+            return Vector3.Distance(node.transform.position, goal.transform.position);
+        }
+        #endregion
+
+        public void Move(Vector3 dir)
+        {
+            dir.y = 0;
+            dir = dir.normalized;
+
+            MoveDirection = dir;
+
+            rb.MovePosition(rb.position + dir * moveSpeed * Time.deltaTime);
+        }
+
+        public void LookTowards(Vector3 direction)
+        {
+            direction.y = 0;
+
+            if (direction == Vector3.zero)
+                return;
+
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.deltaTime));
+        }
+
+        public void Stop()
+        {
+            MoveDirection = Vector3.zero;
+        }
+    }
+}
