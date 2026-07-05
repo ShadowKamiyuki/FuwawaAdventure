@@ -27,14 +27,14 @@ public class FlockManager : MonoBehaviour
     [Header("Optional Target")]
     [SerializeField] private Transform globalTarget;
 
-    private readonly List<FlockAgent> agents = new();
+    private readonly List<FlockAgent> agents = new List<FlockAgent>();
 
     public List<FlockAgent> Agents => agents;
     public float MinSpeed => minSpeed;
     public float MaxSpeed => maxSpeed;
     public float MaxForce => maxForce;
-    public float SeparationRadius => separationRadius;
     public float NeighborRadius => neighborRadius;
+    public float SeparationRadius => separationRadius;
     public float SeparationWeight => separationWeight;
     public float AlignmentWeight => alignmentWeight;
     public float CohesionWeight => cohesionWeight;
@@ -59,7 +59,18 @@ public class FlockManager : MonoBehaviour
                 Random.Range(-spawnExtents.z, spawnExtents.z)
             );
 
-            
+            Vector3 spawnPosition = transform.position + randomOffset;
+            Quaternion spawnRotation = Random.rotation;
+
+            FlockAgent newAgent = Instantiate(agentPrefab, spawnPosition, spawnRotation, transform);
+            newAgent.Initialize(this);
+            agents.Add(newAgent);
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(transform.position, spawnExtents * 2f);
     }
 }

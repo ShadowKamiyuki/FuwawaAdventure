@@ -65,10 +65,10 @@ public class EnemyControllerSB : MonoBehaviour
                 dir = SteearingBehaviours.Arrive(transform, target.position, arriveDistance);
                 break;
             case Mode.Pursue:
-                dir = SteearingBehaviours.Pursue(transform, target, rb, 5f);
+                dir = SteearingBehaviours.Pursue(transform, target, rb, 5f, 5f);
                 break;
             case Mode.Evade:
-                dir = SteearingBehaviours.Evade(transform, target, rb, 5f);
+                dir = SteearingBehaviours.Evade(transform, target, rb, 5f, 5f);
                 break;
             case Mode.Wander:
                 wanderTime -= Time.deltaTime;
@@ -89,7 +89,7 @@ public class EnemyControllerSB : MonoBehaviour
 
     private void Move(Vector3 dir)
     {
-        rb.linearVelocity = dir.normalized * speed;
+        rb.velocity = dir.normalized * speed;
 
         if (dir != Vector3.zero)
         {

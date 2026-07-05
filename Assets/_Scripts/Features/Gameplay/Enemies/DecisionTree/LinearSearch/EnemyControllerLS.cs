@@ -73,13 +73,13 @@ public class EnemyControllerLS : MonoBehaviour
 
     private void Evade()
     {
-        Vector3 dir = SteearingBehaviours.Evade(transform, player, playerRB, predictionTime);
+        Vector3 dir = SteearingBehaviours.Evade(transform, player, playerRB, predictionTime, 5f);
         Move(dir);
     }
 
     private void Pursue()
     {
-        Vector3 dir = SteearingBehaviours.Pursue(transform, player, playerRB, predictionTime);
+        Vector3 dir = SteearingBehaviours.Pursue(transform, player, playerRB, predictionTime, 5f);
         Move(dir);
     }
 
@@ -87,7 +87,7 @@ public class EnemyControllerLS : MonoBehaviour
     {
         if (patrolPoints == null || patrolPoints.Count == 0)
         {
-            rb.linearVelocity = Vector3.zero;
+            rb.velocity = Vector3.zero;
             return;
         }
 
@@ -98,7 +98,7 @@ public class EnemyControllerLS : MonoBehaviour
 
         if (dir.magnitude < patrolPointReachDistance)
         {
-            rb.linearVelocity = Vector3.zero;
+            rb.velocity = Vector3.zero;
             currentPatrolIndex++;
 
             if (currentPatrolIndex >= patrolPoints.Count)
@@ -116,8 +116,8 @@ public class EnemyControllerLS : MonoBehaviour
     private void Move(Vector3 dir)
     {
         Vector3 velocity = dir * speed;
-        velocity.y = rb.linearVelocity.y;
-        rb.linearVelocity = velocity;
+        velocity.y = rb.velocity.y;
+        rb.velocity = velocity;
 
         if (dir != Vector3.zero)
         {
