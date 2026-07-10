@@ -12,6 +12,7 @@
     public void Initialize()
     {
         _view.OnStartClicked += OnStartClicked;
+        _view.OnConfirmClicked += OnConfirmClicked;
         _view.OnQuitClicked += OnQuitClicked;
         _view.Show();
     }
@@ -19,11 +20,13 @@
     public void Dispose()
     {
         _view.OnStartClicked -= OnStartClicked;
+        _view.OnConfirmClicked -= OnConfirmClicked;
         _view.OnQuitClicked -= OnQuitClicked;
         _view.Hide();
+        _view.HideTutorial();
     }
 
-    private void OnStartClicked()
+    private void OnConfirmClicked()
     {
         var request = new LoadingRequest(
             load: new[] { "Game", "Pause", "GameOver" },
@@ -37,5 +40,10 @@
     private void OnQuitClicked()
     {
         UnityEngine.Application.Quit();
+    }
+
+    private void OnStartClicked()
+    {
+        _view.ShowTutorial();
     }
 }
