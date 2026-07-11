@@ -34,6 +34,10 @@ public class PlayerActions : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private float rotationSpeed = 10f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip jumpClip;
+    [SerializeField] private AudioSource audioSource;
+
     public bool IsGrounded => isGrounded;
     public Vector3 Velocity => rb.velocity;
 
@@ -124,6 +128,7 @@ public class PlayerActions : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            audioSource.PlayOneShot(jumpClip);
 
             jumpBufferTimer = 0;
             coyoteTimer = 0;
