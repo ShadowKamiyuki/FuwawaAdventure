@@ -13,6 +13,12 @@ public class BackgroundMusic : MonoBehaviour
         gameStateMachine.OnStateChanged += HandleStateChanged;
     }
 
+    private void OnDestroy()
+    {
+        gameStateMachine.OnStateChanged -= HandleStateChanged;
+        gameStateMachine = null;
+    }
+
     private void HandleStateChanged(AppState state)
     {
         switch (state)
