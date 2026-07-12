@@ -4,7 +4,6 @@ using UnityEngine;
 public class BootstrapInstaller : MonoBehaviour
 {
     [Header("Global Services")]
-    //[SerializeField] private AudioManager audioManager;
     [SerializeField] private CustomUpdateManager updateManager;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private SceneLoaderService sceneLoaderService;
@@ -20,7 +19,6 @@ public class BootstrapInstaller : MonoBehaviour
         ServiceLocator.Register(inputService);
         ServiceLocator.Register<IRespawnService>(new RespawnService());
 
-        //RegisterService<IAudioService>(audioManager);
         RegisterService<ISceneLoader>(sceneLoaderService);
         RegisterService<IUpdateService>(updateManager);
         RegisterService<IAppStateMachine>(gameManager);
