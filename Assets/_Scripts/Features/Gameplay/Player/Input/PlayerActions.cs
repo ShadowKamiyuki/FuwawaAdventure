@@ -36,6 +36,8 @@ public class PlayerActions : MonoBehaviour
 
     public bool IsGrounded => isGrounded;
     public Vector3 Velocity => rb.velocity;
+    public bool IsMoving => _moveDirection.sqrMagnitude > 0.01f;
+    public float HorizontalSpeed => new Vector3(rb.velocity.x, 0f, rb.velocity.z).magnitude;
 
     private void Awake()
     {
